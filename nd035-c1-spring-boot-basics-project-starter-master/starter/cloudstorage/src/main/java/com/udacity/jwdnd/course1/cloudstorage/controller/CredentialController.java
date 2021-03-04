@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/credential")
@@ -42,9 +43,26 @@ public class CredentialController {
         Credential credential = new Credential();
         String username = authentication.getName();
         Integer userid = userService.getUserId(username);
+        List<Credential> credentials = credentialService.getCredentials(userid);
+        String credname = credentialForm.getUsername();
+        Boolean result = true;
+        for(int i =0; i<credentials.size(); i++)
+        {
+            if(credname.equals(credentials.get(i).getUsername())){
+                result = false;
+            }
+        }
+        if(result==false)//fail
+        {
+            model.addAttribute("success", false);
+            model.addAttribute("error", true);
+            model.addAttribute("failure", false);
+            model.addAttribute("message", "Duplicate usernames are not allowed");
+            return "result";
+        }
         String url = credentialForm.getUrl();
         credential.setUrl(url);
-        String credname = credentialForm.getUsername();
+
         credential.setUsername(credname);
         String password = credentialForm.getPassword();
 
@@ -66,8 +84,8 @@ public class CredentialController {
         }
         model.addAttribute("credentials", credentialService.getCredentials(userid));
 
-        model.addAttribute("success", "true");
-        model.addAttribute("failure", "false");
+        model.addAttribute("success", true);
+        model.addAttribute("failure", false);
 
         return "result";
     }

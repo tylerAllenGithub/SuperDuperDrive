@@ -42,8 +42,9 @@ public class FileController {
         boolean result = fileService.addFile(fileUpload, UID);
         //String resultS
         model.addAttribute("success", result);
-        model.addAttribute("failure", !result);
-        model.addAttribute("error", false);
+        model.addAttribute("failure", false);
+        model.addAttribute("error", !result);
+        model.addAttribute("message", "Files cannot be duplicates and cannot be empty");
         List<File> files = fileService.getFiles(UID);
         model.addAttribute("files", files);
         return "result";
@@ -60,9 +61,15 @@ public class FileController {
     }
 
     @GetMapping("/file/delete/{fileId}")
-    public String deleteFile(@PathVariable Integer fileId, Authentication authentication) {
+    public String deleteFile(@PathVariable Integer fileId, Authentication authentication, Model model) {
         fileService.deleteFile(fileId);
-        return "home";
+        Boolean result = false;
+        if(fileService.getFileByID(fileId)==null)
+            result = true;
+        model.addAttribute("success", result);
+        model.addAttribute("error", !result);
+        model.addAttribute("failure", false);
+        return "result";
     }
 
 }

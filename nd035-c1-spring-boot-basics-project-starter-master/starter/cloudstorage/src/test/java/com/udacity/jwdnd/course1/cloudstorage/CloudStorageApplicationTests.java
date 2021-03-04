@@ -83,28 +83,6 @@ class CloudStorageApplicationTests {
 	}
 	@Test
 	public void signupLoginLogout(){
-		/*driver.get("http://localhost:" + this.port + "/signup");
-		SignupPage signupPage = new SignupPage(driver);
-		String username = "user1";
-		String password = "password";
-		signupPage.setFirstName("Tyler");
-		signupPage.setLastName("Allen");
-		signupPage.setUserName(username);
-		signupPage.setPassword(password);
-		signupPage.signUp();
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement marker = wait.until(webDriver -> webDriver.findElement(By.id("login-link")));
-		signupPage.clickLoginLink();
-		String currentUrl = driver.getCurrentUrl();
-		Assertions.assertEquals("http://localhost:"+this.port+"/login", currentUrl);
-		LoginPage loginPage = new LoginPage((driver));
-		loginPage.setUserName(username);
-		loginPage.setPassword(password);
-		loginPage.clickSubmitButton();
-		marker = wait.until(webDriver -> webDriver.findElement(By.id("homeTitle")));
-		currentUrl = driver.getCurrentUrl();
-		Assertions.assertEquals("http://localhost:"+this.port+"/home", currentUrl);
-		*/
 		signupLogin();
 		HomePage homePage = new HomePage(driver);
 		homePage.logout();

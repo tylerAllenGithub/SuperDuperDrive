@@ -26,6 +26,15 @@ public class FileService {
             String size = String.valueOf(fileUpload.getSize());
             if(Long.valueOf(size) <= 0)
                 return false;
+            List<File> files = getFiles(userid);
+            for(int i =0; i<files.size();i++)
+            {
+                if(files.get(i)!=null) {
+                    if (files.get(i).getFileName().equals(fileName)) {
+                        return false;
+                    }
+                }
+            }
             Integer fileId=null;
             File file = new File(fileId, fileName, contentType, size, userid, fileUpload.getBytes());
             fileMapper.insert(file);
