@@ -86,7 +86,7 @@ public class CredentialController {
 
         model.addAttribute("success", true);
         model.addAttribute("failure", false);
-
+        model.addAttribute("error", false);
         return "result";
     }
     @GetMapping("/delete/{credentialId}")
