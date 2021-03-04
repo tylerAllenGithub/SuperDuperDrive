@@ -5,12 +5,17 @@ import com.udacity.jwdnd.course1.cloudstorage.models.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,11 +40,29 @@ public class FileController {
         String username = authentication.getName();
         Integer UID = userService.getUserId(username);
         boolean result = fileService.addFile(fileUpload, UID);
-        model.addAttribute("fileUploadSuccess", result);
-        model.addAttribute("fileUploadFailure", !result);
+        //String resultS
+        model.addAttribute("success", result);
+        model.addAttribute("failure", !result);
+        model.addAttribute("error", false);
         List<File> files = fileService.getFiles(UID);
         model.addAttribute("files", files);
         return "result";
+    }
+
+    @GetMapping("/file/view/{fileId}")
+    public ResponseEntity<ByteArrayResource> getFileView(@PathVariable Integer fileId, Authentication authentication)  {
+
+        File file = fileService.getFileByID(fileId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getContenttype())).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
+                + file.getFileName() + "\"").body(new
+                ByteArrayResource(file.getFiledata()));
+    }
+
+    @GetMapping("/file/delete/{fileId}")
+    public String deleteFile(@PathVariable Integer fileId, Authentication authentication) {
+        fileService.deleteFile(fileId);
+        return "home";
     }
 
 }

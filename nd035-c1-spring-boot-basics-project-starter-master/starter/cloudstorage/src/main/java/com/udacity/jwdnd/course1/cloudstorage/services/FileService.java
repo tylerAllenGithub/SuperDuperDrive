@@ -38,6 +38,14 @@ public class FileService {
     public File getFile(String fileName){
         return fileMapper.getFile(fileName);
     }
+    public void deleteFile(Integer fileId){
+        fileMapper.deleteFile(fileId);
+    }
+    public File getFileByID(Integer fileId){
+        return fileMapper.getFileByID(fileId);
+    }
+    public byte[] getFileData(String fileName){ return fileMapper.getFileData(fileName);}
+
     public List<File> getFiles(Integer userId){
         return fileMapper.getFiles(userId);
     }
